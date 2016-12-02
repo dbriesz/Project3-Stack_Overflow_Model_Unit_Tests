@@ -1,5 +1,6 @@
 package com.teamtreehouse.techdegree.overboard.model;
 
+import com.teamtreehouse.techdegree.overboard.exc.VotingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,6 +15,7 @@ public class UserTest {
     private User user2;
     private Question question;
     private Answer answer;
+    private String votingMessage;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -26,6 +28,8 @@ public class UserTest {
 
         question = user1.askQuestion("Differences between HashMap and Hashtable?");
         answer = user2.answerQuestion(question, "Hashtable is synchronized, whereas HashMap is not...");
+
+        votingMessage = "You cannot vote for yourself!";
     }
 
     @Test
@@ -47,5 +51,33 @@ public class UserTest {
         user1.acceptAnswer(answer);
 
         assertEquals(15, user2.getReputation());
+    }
+
+    @Test
+    public void authorCannotUpvoteOwnQuestion() throws Exception {
+        thrown.expect(VotingException.class);
+        thrown.expectMessage("You cannot vote for yourself!");
+        user1.upVote(question);
+    }
+
+    @Test
+    public void authorCannotUpvoteOwnAnswer() throws Exception {
+        thrown.expect(VotingException.class);
+        thrown.expectMessage("You cannot vote for yourself!");
+        user2.upVote(answer);
+    }
+
+    @Test
+    public void authorCannotDownvoteOwnQuestion() throws Exception {
+        thrown.expect(VotingException.class);
+        thrown.expectMessage("You cannot vote for yourself!");
+        user1.downVote(question);
+    }
+
+    @Test
+    public void authorCannotDownvoteOwnAnswer() throws Exception {
+        thrown.expect(VotingException.class);
+        thrown.expectMessage("You cannot vote for yourself!");
+        user2.downVote(answer);
     }
 }
