@@ -9,43 +9,43 @@ import static org.junit.Assert.*;
 
 public class UserTest {
 
+    private Board board;
     private User user1;
     private User user2;
-    private Question question1;
-    private Answer answer1;
-    private Post post1;
-    private Post post2;
+    private Question question;
+    private Answer answer;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @Before
     public void setUp() throws Exception {
-        String topic = "Getting Started in Java";
-        Board board = new Board(topic);
-        user1 = new User(board, topic);
-        user2 = new User(board, topic);
+        board = new Board("Java");
+        user1 = board.createUser("Alice");
+        user2 = board.createUser("Bob");
 
-        question1 = new Question(user1, "Differences between HashMap and Hashtable?");
-        post1 = user1.askQuestion(String.valueOf(question1));
-
-        answer1 = new Answer(question1, user2, "Hashtable is synchronized, whereas HashMap is not...");
-        post2 = user2.answerQuestion(question1, String.valueOf(answer1));
+        question = user1.askQuestion("Differences between HashMap and Hashtable?");
+        answer = user2.answerQuestion(question, "Hashtable is synchronized, whereas HashMap is not...");
     }
 
     @Test
     public void questionUpvoteReturnsCorrectRepIncrease() throws Exception {
-        user2.upVote(post1);
-        int reputation1 = user1.getReputation();
+        user2.upVote(question);
 
-        assertEquals(5, reputation1);
+        assertEquals(5, user1.getReputation());
     }
 
     @Test
     public void answerUpvoteReturnsCorrectRepIncrease() throws Exception {
-        user1.upVote(post2);
-        int reputation2 = user2.getReputation();
+        user1.upVote(answer);
 
-        assertEquals(10, reputation2);
+        assertEquals(10, user2.getReputation());
+    }
+
+    @Test
+    public void answerAcceptanceReturnsCorrectRepIncrease() throws Exception {
+        user1.acceptAnswer(answer);
+
+        assertEquals(15, user2.getReputation());
     }
 }
