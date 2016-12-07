@@ -73,6 +73,7 @@ public class UserTest {
     public void authorCannotUpvoteOwnQuestion() throws Exception {
         thrown.expect(VotingException.class);
         thrown.expectMessage(votingMessage);
+
         user1.upVote(question1);
     }
 
