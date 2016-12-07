@@ -51,18 +51,21 @@ public class UserTest {
     @Test
     public void questionUpvoteReturnsCorrectRepIncrease() throws Exception {
         user2.upVote(question1);
+
         assertEquals(5, user1.getReputation());
     }
 
     @Test
     public void answerUpvoteReturnsCorrectRepIncrease() throws Exception {
         user1.upVote(answer1);
+
         assertEquals(10, user2.getReputation());
     }
 
     @Test
     public void answerAcceptanceReturnsCorrectRepIncrease() throws Exception {
         user1.acceptAnswer(answer1);
+
         assertEquals(15, user2.getReputation());
     }
 
@@ -77,6 +80,7 @@ public class UserTest {
     public void authorCannotUpvoteOwnAnswer() throws Exception {
         thrown.expect(VotingException.class);
         thrown.expectMessage(votingMessage);
+
         user2.upVote(answer1);
     }
 
@@ -84,6 +88,7 @@ public class UserTest {
     public void authorCannotDownvoteOwnQuestion() throws Exception {
         thrown.expect(VotingException.class);
         thrown.expectMessage(votingMessage);
+
         user1.downVote(question1);
     }
 
@@ -91,6 +96,7 @@ public class UserTest {
     public void authorCannotDownvoteOwnAnswer() throws Exception {
         thrown.expect(VotingException.class);
         thrown.expectMessage(votingMessage);
+
         user2.downVote(answer1);
     }
 
@@ -99,8 +105,10 @@ public class UserTest {
         User questioner = answer1.getQuestion().getAuthor();
         String message = String.format("Only %s can accept this answer as it is their question",
                                        questioner.getName());
+
         thrown.expect(AnswerAcceptanceException.class);
         thrown.expectMessage(message);
+
         user2.acceptAnswer(answer1);
     }
 
@@ -108,6 +116,7 @@ public class UserTest {
     public void downvotingCostsPoint() throws Exception {
         user1.upVote(answer1);
         user1.downVote(answer3);
+
         assertEquals(9, user2.getReputation());
     }
 }
