@@ -105,7 +105,7 @@ public class UserTest {
     public void onlyQuestionerCanAcceptAnswer() throws Exception {
         User questioner = answer1.getQuestion().getAuthor();
         String message = String.format("Only %s can accept this answer as it is their question",
-                                       questioner.getName());
+                questioner.getName());
 
         thrown.expect(AnswerAcceptanceException.class);
         thrown.expectMessage(message);
